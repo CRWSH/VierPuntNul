@@ -10,22 +10,29 @@
 
 float angle = 0;
 int w = 750;
-float mult1 = 3;
+float mult1 = 3.01;
 Curve curve = new Curve();
+PGraphics pg;
 
 
 void setup() {
-  size(800, 800);
+  size(800, 800, P2D);
+  background(0);
+  pg = createGraphics(width,height);
   
 }
 
 void draw() {
-  background(0);
+  //background(0);
   float d = w - 0.2*w;
   float r = d/2;
+  
+  pg.beginDraw();
+  
+  pg.background(0,2);
 
-  noFill();
-  stroke(255);
+  pg.noFill();
+  pg.stroke(255);
   
   float cx = (width-w)/2 + w / 2;
   float cy = (height-w)/2 + w / 2;
@@ -40,8 +47,8 @@ void draw() {
   
   
 
-  noFill();
-  stroke(255);
+  pg.noFill();
+  pg.stroke(255);
   float x2 = r * cos(angle - HALF_PI);
   float y2 = r * sin(angle - HALF_PI);
   //stroke(255, 150);
@@ -56,10 +63,14 @@ void draw() {
   
   curve.addPoint();
   curve.show();
+  
+  pg.endDraw();
+  
+  image(pg, 0,0);
  
 
 
-  angle -= 0.01;
+  angle -= 0.02;
 
   //if (angle < -TWO_PI) {
   

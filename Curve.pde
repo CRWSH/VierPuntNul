@@ -29,14 +29,14 @@ class Curve {
   }
 
   void show() {
-    stroke(255);
-    strokeWeight(4);
-    noFill();
-    beginShape();
+    pg.stroke(255);
+    pg.strokeWeight(4);
+    pg.noFill();
+    pg.beginShape();
     for (PVector v : path) {
-      vertex(v.x, v.y);
+      pg.vertex(v.x, v.y);
     }
-    endShape();
+    pg.endShape();
 
     //strokeWeight(8);
     //point(current.x, current.y);
