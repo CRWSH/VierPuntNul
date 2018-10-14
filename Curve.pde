@@ -2,6 +2,7 @@ class Curve {
 
   ArrayList<PVector> path;
   PVector current;
+  int max = 100;
 
   Curve() {
     path = new ArrayList<PVector>();
@@ -18,6 +19,9 @@ class Curve {
 
   void addPoint() {
     path.add(current);
+    while(path.size() > max) {
+      path.remove(0);
+    }
   }
   
   void reset() {
@@ -26,7 +30,7 @@ class Curve {
 
   void show() {
     stroke(255);
-    strokeWeight(1);
+    strokeWeight(4);
     noFill();
     beginShape();
     for (PVector v : path) {
@@ -34,8 +38,8 @@ class Curve {
     }
     endShape();
 
-    strokeWeight(8);
-    point(current.x, current.y);
+    //strokeWeight(8);
+    //point(current.x, current.y);
     current = new PVector();
   }
 }
