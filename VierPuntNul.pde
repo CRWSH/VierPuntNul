@@ -9,24 +9,24 @@
 // https://editor.p5js.org/codingtrain/sketches/BJbj5l3Y7
 
 float angle = 0;
-int w = 80;
+int w = 600;
 int cols;
 int rows;
-Curve[][] curves;
+Curve curve = new Curve();;
 
 void setup() {
   size(800, 800);
   // For HiDPI displays
   // pixelDensity(2);
-  cols = width / w - 1;
-  rows = height / w - 1;
-  curves = new Curve[rows][cols];
+  cols = 1;
+  rows = 1;
+  //curves = new Curve[rows][cols];
 
-  for (int j = 0; j < rows; j++) {
-    for (int i = 0; i < cols; i++) {
-      curves[j][i] = new Curve();
-    }
-  }
+  //for (int j = 0; j < rows; j++) {
+  //  for (int i = 0; i < cols; i++) {
+  //    curves[j][i] = new Curve();
+  //  }
+  //}
 }
 
 void draw() {
@@ -36,64 +36,58 @@ void draw() {
 
   noFill();
   stroke(255);
-  for (int i = 0; i < cols; i++) {
-    float cx = w + i * w + w / 2;
-    float cy = w / 2;
-    strokeWeight(1);
-    stroke(255);
-    ellipse(cx, cy, d, d);
-    float x = r * cos(angle * (i + 1) - HALF_PI);
-    float y = r * sin(angle * (i + 1) - HALF_PI);
-    strokeWeight(8);
-    stroke(255);
-    point(cx + x, cy + y);
-    stroke(255, 150);
-    strokeWeight(1);
-    line(cx + x, 0, cx + x, height); 
+  
+  float cx = (width-w)/2 + w / 2;
+  float cy = (height-w)/2 + w / 2;
+  //strokeWeight(1);
+  //stroke(255);
+  //ellipse(cx, cy, d, d);
+  float x1 = r * cos(angle  - HALF_PI);
+  float y1 = r * sin(angle  - HALF_PI);
+  //strokeWeight(8);
+  //stroke(255);
+  //point(cx + x, cy + y);
+  stroke(255, 150);
+  strokeWeight(1);
+  line(cx + x1, 0, cx + x1, height); 
 
-    for (int j = 0; j < rows; j++) {
-      curves[j][i].setX(cx + x);
-    }
-  }
+  
+  curve.setX(cx + x1);
+  
+  
 
   noFill();
   stroke(255);
-  for (int j = 0; j < rows; j++) {
-    float cx = w / 2;
-    float cy = w + j * w + w / 2;
-    strokeWeight(1);
-    stroke(255);
-    ellipse(cx, cy, d, d);
-    float x = r * cos(angle * (j + 1) - HALF_PI);
-    float y = r * sin(angle * (j + 1) - HALF_PI);
-    strokeWeight(8);
-    stroke(255);
-    point(cx + x, cy + y);
-    stroke(255, 150);
-    strokeWeight(1);
-    line(0, cy + y, width, cy + y);
+ 
+  //strokeWeight(1);
+  //stroke(255);
+  //ellipse(cx, cy, d, d);
+  float x2 = r * cos(angle - HALF_PI);
+  float y2 = r * sin(angle - HALF_PI);
+  //strokeWeight(8);
+  //stroke(255);
+  //point(cx + x, cy + y);
+  stroke(255, 150);
+  strokeWeight(1);
+  line(0, cy + y2, width, cy + y2);
 
-    for (int i = 0; i < cols; i++) {
-      curves[j][i].setY(cy + y);
-    }
-  }
+  
+  curve.setY(cy + y2);
+  
+  
 
-  for (int j = 0; j < rows; j++) {
-    for (int i = 0; i < cols; i++) {
-      curves[j][i].addPoint();
-      curves[j][i].show();
-    }
-  }
+  
+  curve.addPoint();
+  curve.show();
+ 
 
 
   angle -= 0.01;
 
   if (angle < -TWO_PI) {
-    for (int j = 0; j < rows; j++) {
-      for (int i = 0; i < cols; i++) {
-        curves[j][i].reset();
-      }
-    }
+  
+    curve.reset();
+    
     saveFrame("lissajous.png");
     angle = 0;
   }
