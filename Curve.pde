@@ -2,7 +2,7 @@ class Curve {
 
   ArrayList<PVector> path;
   PVector current;
-  int max = 100;
+  int max = 19;
 
   Curve() {
     path = new ArrayList<PVector>();
