@@ -36,7 +36,7 @@ void draw() {
   
   pg.beginDraw();
   
-  pg.background(0);
+  pg.background(0,8);
 
   pg.noFill();
   pg.stroke(255);
