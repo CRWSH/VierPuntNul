@@ -19,6 +19,15 @@ float[] x1old, y1old, x1 = {0,0,0,0}, y1 = {0,0,0,0};
 PVector c1, c2, c3, c4;
 PFont font;
 
+int cols;
+int rows;
+float[][] current;// = new float[cols][rows];
+float[][] previous;// = new float[cols][rows];
+
+float dampening = 0.999;
+
+int resolution = 2;
+
 
 void setup() {
   size(800, 800, P2D);
@@ -45,11 +54,42 @@ void setup() {
     curve[i] = new Curve();
   }
   
+  cols = width;
+  rows = height;
+  current = new float[cols][rows];
+  previous = new float[cols][rows];
+  
   frameRate(25);
   
 }
 
-void draw() {   
+void draw() {
+  loadPixels();
+  for (int i = 1; i < cols-1; i++) {
+    for (int j = 1; j < rows-1; j++) {
+      current[i][j] = (
+        previous[i-1][j] + 
+        previous[i+1][j] +
+        previous[i][j-1] + 
+        previous[i][j+1]) / 2 -
+        current[i][j];
+      current[i][j] = current[i][j] * dampening;
+      int index = i + j * cols;
+      if(i>c1.x && i<c2.x && j>c1.y && j<c3.y) {
+        pixels[index] = color(current[i][j]);
+      } else {
+        pixels[index] = color(10-current[i][j]);
+      }
+      
+    }
+  }
+  updatePixels();
+
+  float[][] temp = previous;
+  previous = current;
+  current = temp;
+    
+  
     pg.beginDraw();
     
     
@@ -64,14 +104,14 @@ void draw() {
     pg.ellipse(c3.x, c3.y, 40, 40);
     pg.ellipse(c4.x, c4.y, 40, 40);
   
-    pg.noFill();
-    pg.stroke(255);
-    pg.strokeWeight(1);
+    //pg.noFill();
+    //pg.stroke(255);
+    //pg.strokeWeight(1);
     
-    pg.line(c1.x, c1.y,c2.x, c2.y);
-    pg.line(c2.x, c2.y,c3.x, c3.y);
-    pg.line(c3.x, c3.y,c4.x, c4.y);
-    pg.line(c4.x, c4.y,c1.x, c1.y);
+    //pg.line(c1.x, c1.y,c2.x, c2.y);
+    //pg.line(c2.x, c2.y,c3.x, c3.y);
+    //pg.line(c3.x, c3.y,c4.x, c4.y);
+    //pg.line(c4.x, c4.y,c1.x, c1.y);
     //pg.line(c1.x, c1.y,c3.x, c3.y);
     //pg.line(c2.x, c2.y,c4.x, c4.y);
     
@@ -93,8 +133,15 @@ void draw() {
     x1old[i] = x1[i];
     y1old[i] = y1[i];
     
-    curve[i].setX(cx + x1[i] + sl.x);
-    curve[i].setY(cy + y1[i] + sl.y);
+    float x = cx + x1[i] + sl.x;
+    float y = cy + y1[i] + sl.y;
+    
+    println(x+" "+y);
+  
+    
+    curve[i].setX(x);
+    curve[i].setY(y);
+    previous[int(x)][int(y)]=500;
     
     
     pg.noFill();
