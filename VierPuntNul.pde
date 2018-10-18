@@ -17,13 +17,16 @@ PGraphics pg;
 float cx,cy,d,r;
 float[] x1old, y1old, x1 = {0,0,0,0}, y1 = {0,0,0,0};
 PVector c1, c2, c3, c4;
-
+PFont font;
 
 
 void setup() {
   size(800, 800, P2D);
+  
   background(0);
   pg = createGraphics(width,height);
+  font = createFont("Aleo", 150);
+ 
   cx = (width-w)/2 + w / 2;
   cy = (height-w)/2 + w / 2;
   d = w - 0.2*w;
@@ -49,7 +52,11 @@ void setup() {
 void draw() {   
     pg.beginDraw();
     
-    pg.background(0);
+    
+    //pg.stroke(255);
+    
+    
+    pg.background(0,5);
     pg.fill(255);
     pg.noStroke();
     pg.ellipse(c1.x, c1.y, 40, 40);
@@ -65,8 +72,8 @@ void draw() {
     pg.line(c2.x, c2.y,c3.x, c3.y);
     pg.line(c3.x, c3.y,c4.x, c4.y);
     pg.line(c4.x, c4.y,c1.x, c1.y);
-    pg.line(c1.x, c1.y,c3.x, c3.y);
-    pg.line(c2.x, c2.y,c4.x, c4.y);
+    //pg.line(c1.x, c1.y,c3.x, c3.y);
+    //pg.line(c2.x, c2.y,c4.x, c4.y);
     
     
     float x2 = 20*sin(anglesin);
@@ -100,7 +107,23 @@ void draw() {
     anglelis[i] -= 0.005;
   }
   anglesin -= 0.5;
+  
+  pg.textFont(font);
+  pg.textAlign(CENTER,CENTER);
+  pg.noStroke();
+  pg.fill(255);
+  pg.text("Punt", cx+width*3/100, cy-height*3/100);
+  pg.textAlign(LEFT,TOP);
+  pg.text("Vier", c1.x+width*3/100, c1.y-height*1/100);
+  pg.textAlign(RIGHT,BOTTOM);
+  pg.text("Nul", c3.x-width*3/100, c3.y-height*1/100);
+  
+  
   pg.endDraw();
     
   image(pg, 0,0);
+  //fill(255,20);
+  //noStroke();
+  //text("Vier\nPunt\nNul", cx, cy);
+  
 }

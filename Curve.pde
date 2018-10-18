@@ -29,8 +29,8 @@ class Curve {
   }
 
   void show() {
-    pg.stroke(255);
-    pg.strokeWeight(4);
+    pg.stroke(255,200);
+    pg.strokeWeight(6);
     pg.noFill();
     pg.beginShape();
     for (PVector v : path) {
