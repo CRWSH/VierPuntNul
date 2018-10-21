@@ -27,10 +27,14 @@ float[][] previous;// = new float[cols][rows];
 float dampening = 0.999;
 
 int resolution = 2;
+color white, black, blue;
 
 
 void setup() {
   size(800, 800, P2D);
+  white = color(255); 
+  blue = color(#76D0FF);  
+  black = color(0);
   
   background(0);
   pg = createGraphics(width,height);
@@ -40,6 +44,7 @@ void setup() {
   cy = (height-w)/2 + w / 2;
   d = w - 0.2*w;
   r = d/2;
+  
   
   x1old = new float[4];
   y1old = new float[4];
@@ -77,12 +82,21 @@ void draw() {
       current[i][j] = current[i][j] * dampening;
       int index = i + j * cols;
       if(i>c1.x && i<c2.x && j>c1.y && j<c3.y) {
-        pixels[index] = color(current[i][j]);
+        if(current[i][j]>=0.5) {
+          pixels[index] = lerpColor(blue,white, (current[i][j]-0.5)*2) ; 
+        } else {
+          pixels[index] = lerpColor(black,blue, current[i][j]*2);
+        }
+        
       } else {
-        pixels[index] = color(10-current[i][j]);
-      }
+        if(current[i][j]>=0.5) {
+          pixels[index] = lerpColor(blue,white, 0.05 -(current[i][j]-0.5)*2) ; 
+        } else {
+          pixels[index] = lerpColor(black,blue, 0.05-current[i][j]*2);
+        }
       
     }
+  }
   }
   updatePixels();
 
@@ -139,7 +153,7 @@ void draw() {
     
     curve[i].setX(x);
     curve[i].setY(y);
-    previous[int(x)][int(y)]=500;
+    previous[int(x)][int(y)]=2;
     
     
     pg.noFill();

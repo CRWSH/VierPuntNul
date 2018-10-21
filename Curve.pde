@@ -29,7 +29,7 @@ class Curve {
   }
 
   void show() {
-    pg.stroke(0);
+    pg.stroke(black);
     pg.strokeWeight(6);
     pg.noFill();
     pg.beginShape();
