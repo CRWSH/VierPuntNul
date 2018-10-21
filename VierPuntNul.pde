@@ -10,7 +10,7 @@
 
 float[] anglelis = {0,HALF_PI,PI,PI + HALF_PI};
 float anglesin = 0; 
-int w = 750;
+int w = 650;
 float mult1 = 5;
 Curve[] curve = new Curve[4];
 PGraphics pg;
@@ -34,7 +34,7 @@ void setup() {
   
   background(0);
   pg = createGraphics(width,height);
-  font = createFont("Aleo", 150);
+  font = createFont("Grand National Semi-Italic", 100);
  
   cx = (width-w)/2 + w / 2;
   cy = (height-w)/2 + w / 2;
@@ -60,6 +60,7 @@ void setup() {
   previous = new float[cols][rows];
   
   frameRate(25);
+  //smooth();
   
 }
 
@@ -96,7 +97,7 @@ void draw() {
     //pg.stroke(255);
     
     
-    pg.background(0,5);
+    pg.background(0,10);
     pg.fill(255);
     pg.noStroke();
     pg.ellipse(c1.x, c1.y, 40, 40);
@@ -116,7 +117,7 @@ void draw() {
     //pg.line(c2.x, c2.y,c4.x, c4.y);
     
     
-    float x2 = 20*sin(anglesin);
+    float x2 = width/40*sin(anglesin);
     
     for(int i=0; i<anglelis.length; i++){
     
@@ -136,9 +137,6 @@ void draw() {
     float x = cx + x1[i] + sl.x;
     float y = cy + y1[i] + sl.y;
     
-    println(x+" "+y);
-  
-    
     curve[i].setX(x);
     curve[i].setY(y);
     previous[int(x)][int(y)]=500;
@@ -157,7 +155,8 @@ void draw() {
   
   pg.textFont(font);
   pg.textAlign(CENTER,CENTER);
-  pg.noStroke();
+  pg.stroke(0);
+  //pg.noStroke();
   pg.fill(255);
   pg.text("Punt", cx+width*3/100, cy-height*3/100);
   pg.textAlign(LEFT,TOP);
