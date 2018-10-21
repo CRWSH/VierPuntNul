@@ -24,9 +24,9 @@ int rows;
 float[][] current;// = new float[cols][rows];
 float[][] previous;// = new float[cols][rows];
 
-float dampening = 0.999;
+float dampening = 0.99;
 
-int resolution = 2;
+int resolution = 3;
 color white, black, blue;
 
 
@@ -59,8 +59,8 @@ void setup() {
     curve[i] = new Curve();
   }
   
-  cols = width;
-  rows = height;
+  cols = width/resolution;
+  rows = height/resolution;
   current = new float[cols][rows];
   previous = new float[cols][rows];
   
@@ -70,7 +70,6 @@ void setup() {
 }
 
 void draw() {
-  loadPixels();
   for (int i = 1; i < cols-1; i++) {
     for (int j = 1; j < rows-1; j++) {
       current[i][j] = (
@@ -81,24 +80,26 @@ void draw() {
         current[i][j];
       current[i][j] = current[i][j] * dampening;
       int index = i + j * cols;
-      if(i>c1.x && i<c2.x && j>c1.y && j<c3.y) {
+      if(i*resolution>c1.x && i*resolution<c2.x && j*resolution>c1.y && j*resolution<c3.y) {
         if(current[i][j]>=0.5) {
-          pixels[index] = lerpColor(blue,white, (current[i][j]-0.5)*2) ; 
+          
+          fill(lerpColor(blue,white, (current[i][j]-0.5)*2));
         } else {
-          pixels[index] = lerpColor(black,blue, current[i][j]*2);
+          fill(lerpColor(black,blue, current[i][j]*2));
         }
         
       } else {
         if(current[i][j]>=0.5) {
-          pixels[index] = lerpColor(blue,white, 0.05 -(current[i][j]-0.5)*2) ; 
+          fill(lerpColor(blue,white, 0.05 -(current[i][j]-0.5)*2)) ; 
         } else {
-          pixels[index] = lerpColor(black,blue, 0.05-current[i][j]*2);
+          fill(lerpColor(black,blue, 0.05-current[i][j]*2));
         }
-      
     }
+    noStroke();
+    rect(i*resolution,j*resolution, resolution,resolution);
   }
   }
-  updatePixels();
+  
 
   float[][] temp = previous;
   previous = current;
@@ -151,16 +152,16 @@ void draw() {
     float x = cx + x1[i] + sl.x;
     float y = cy + y1[i] + sl.y;
     
-    curve[i].setX(x);
-    curve[i].setY(y);
-    previous[int(x)][int(y)]=2;
+    //curve[i].setX(x);
+    //curve[i].setY(y);
+    previous[int(x/resolution)][int(y/resolution)]=2;
     
     
     pg.noFill();
     pg.stroke(255);
     
-    curve[i].addPoint();
-    curve[i].show();
+    //curve[i].addPoint();
+    //curve[i].show();
     
   
     anglelis[i] -= 0.005;
