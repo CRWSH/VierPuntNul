@@ -24,7 +24,8 @@ int rows;
 float[][] current;// = new float[cols][rows];
 float[][] previous;// = new float[cols][rows];
 
-float dampening = 0.99;
+float dampening = 0.999;
+boolean even = true;
 
 int resolution = 3;
 color white, black, blue;
@@ -33,12 +34,12 @@ color white, black, blue;
 void setup() {
   size(800, 800, P2D);
   white = color(255); 
-  blue = color(#76D0FF);  
+  blue = color(44,  0,  184);  
   black = color(0);
   
   background(0);
   pg = createGraphics(width,height);
-  font = createFont("Grand National Semi-Italic", 100);
+  font = createFont("Grand National Italic", 120);
  
   cx = (width-w)/2 + w / 2;
   cy = (height-w)/2 + w / 2;
@@ -70,40 +71,48 @@ void setup() {
 }
 
 void draw() {
-  for (int i = 1; i < cols-1; i++) {
-    for (int j = 1; j < rows-1; j++) {
-      current[i][j] = (
-        previous[i-1][j] + 
-        previous[i+1][j] +
-        previous[i][j-1] + 
-        previous[i][j+1]) / 2 -
-        current[i][j];
-      current[i][j] = current[i][j] * dampening;
-      int index = i + j * cols;
-      if(i*resolution>c1.x && i*resolution<c2.x && j*resolution>c1.y && j*resolution<c3.y) {
-        if(current[i][j]>=0.5) {
+  
+  if(frameCount%3 == 0) {
+    //println("x");
+    even = (frameCount%2 == 0);
+    for (int i = 1; i < cols-1; i++) {
+      for (int j = 1; j < rows-1; j++) {
+        if (true) { 
+          current[i][j] = (
+            previous[i-1][j] + 
+            previous[i+1][j] +
+            previous[i][j-1] + 
+            previous[i][j+1]) / 2 -
+            current[i][j];
+        }
+        current[i][j] = current[i][j] * dampening;
+        int index = i + j * cols;
+        if(i*resolution>c1.x && i*resolution<c2.x && j*resolution>c1.y && j*resolution<c3.y) {
+          if(current[i][j]>=0.5) {
+            
+            fill(lerpColor(blue,white, (current[i][j]-0.5)*2));
+          } else {
+            fill(lerpColor(black,blue, current[i][j]*2));
+          }
           
-          fill(lerpColor(blue,white, (current[i][j]-0.5)*2));
         } else {
-          fill(lerpColor(black,blue, current[i][j]*2));
-        }
-        
-      } else {
-        if(current[i][j]>=0.5) {
-          fill(lerpColor(blue,white, 0.05 -(current[i][j]-0.5)*2)) ; 
-        } else {
-          fill(lerpColor(black,blue, 0.05-current[i][j]*2));
-        }
+          if(current[i][j]>=0.5) {
+            fill(lerpColor(blue,white, 0.05 -(current[i][j]-0.5)*2)) ; 
+          } else {
+            fill(lerpColor(black,blue, 0.05-current[i][j]*2));
+          }
+      }
+      noStroke();
+      rect(i*resolution,j*resolution, resolution,resolution);
     }
-    noStroke();
-    rect(i*resolution,j*resolution, resolution,resolution);
-  }
-  }
+    }
+  
   
 
   float[][] temp = previous;
   previous = current;
   current = temp;
+  }
     
   
     pg.beginDraw();
@@ -115,10 +124,11 @@ void draw() {
     pg.background(0,10);
     pg.fill(255);
     pg.noStroke();
-    pg.ellipse(c1.x, c1.y, 40, 40);
-    pg.ellipse(c2.x, c2.y, 40, 40);
-    pg.ellipse(c3.x, c3.y, 40, 40);
-    pg.ellipse(c4.x, c4.y, 40, 40);
+    pg.rectMode(CENTER);
+    pg.rect(c1.x, c1.y, 40, 40);
+    pg.rect(c2.x, c2.y, 40, 40);
+    pg.rect(c3.x, c3.y, 40, 40);
+    pg.rect(c4.x, c4.y, 40, 40);
   
     //pg.noFill();
     //pg.stroke(255);
@@ -154,7 +164,9 @@ void draw() {
     
     //curve[i].setX(x);
     //curve[i].setY(y);
-    previous[int(x/resolution)][int(y/resolution)]=2;
+    
+    previous[int(x/resolution)][int(y/resolution)]=1;
+  
     
     
     pg.noFill();
@@ -164,9 +176,9 @@ void draw() {
     //curve[i].show();
     
   
-    anglelis[i] -= 0.005;
+    anglelis[i] -= 0.0025;
   }
-  anglesin -= 0.5;
+  anglesin -= 0.25;
   
   pg.textFont(font);
   pg.textAlign(CENTER,CENTER);
