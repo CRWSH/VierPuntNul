@@ -7,6 +7,14 @@
 
 // p5.js version:
 // https://editor.p5js.org/codingtrain/sketches/BJbj5l3Y7
+import com.hamoid.*;
+
+import geomerative.*;
+
+VideoExport videoExport;
+
+RShape vier, punt, nul;
+
 
 float[] anglelis = {0,HALF_PI,PI,PI + HALF_PI};
 float anglesin = 0; 
@@ -24,11 +32,15 @@ int rows;
 float[][] current;// = new float[cols][rows];
 float[][] previous;// = new float[cols][rows];
 
+float strokeweight, sqwidth;
+
 float dampening = 0.999;
 boolean even = true;
 
 int resolution = 3;
 color white, black, blue;
+
+
 
 
 void setup() {
@@ -40,6 +52,11 @@ void setup() {
   background(0);
   pg = createGraphics(width,height);
   font = createFont("Grand National Italic", 120);
+  RG.init(this);
+  vier = RG.getText("Vier", "grandnationalital.ttf", height*120/800, LEFT);
+  punt = RG.getText("Punt", "grandnationalital.ttf", height*120/800, CENTER);
+  nul = RG.getText("Nul", "grandnationalital.ttf", height*120/800, RIGHT);
+  
  
   cx = (width-w)/2 + w / 2;
   cy = (height-w)/2 + w / 2;
@@ -65,9 +82,16 @@ void setup() {
   current = new float[cols][rows];
   previous = new float[cols][rows];
   
+  strokeweight = 2/800.0*height;
+  println(strokeweight);
+  sqwidth = 40/800.0*height;
+  
+  
+  
   frameRate(25);
   //smooth();
-  
+  //videoExport = new VideoExport(this);
+  //videoExport.startMovie();
 }
 
 void draw() {
@@ -116,20 +140,37 @@ void draw() {
     
   
     pg.beginDraw();
-    
-    
-    //pg.stroke(255);
-    
-    
+  
     pg.background(0,10);
     pg.fill(255);
-    pg.noStroke();
+    pg.stroke(0);
+    pg.strokeWeight(strokeweight);
     pg.rectMode(CENTER);
-    pg.rect(c1.x, c1.y, 40, 40);
-    pg.rect(c2.x, c2.y, 40, 40);
-    pg.rect(c3.x, c3.y, 40, 40);
-    pg.rect(c4.x, c4.y, 40, 40);
-  
+    
+    pg.pushMatrix();
+    pg.translate(c1.x, c1.y);
+    pg.rotate(QUARTER_PI);
+    pg.rect(0,0, sqwidth, sqwidth);
+    pg.popMatrix();
+    
+    pg.pushMatrix();
+    pg.translate(c2.x, c2.y);
+    pg.rotate(QUARTER_PI);
+    pg.rect(0,0, sqwidth, sqwidth);
+    pg.popMatrix();
+    
+    pg.pushMatrix();
+    pg.translate(c3.x, c3.y);
+    pg.rotate(QUARTER_PI);
+    pg.rect(0,0, sqwidth, sqwidth);
+    pg.popMatrix();
+    
+    pg.pushMatrix();
+    pg.translate(c4.x, c4.y);
+    pg.rotate(QUARTER_PI);
+    pg.rect(0,0, sqwidth, sqwidth);
+    pg.popMatrix();
+    
     //pg.noFill();
     //pg.stroke(255);
     //pg.strokeWeight(1);
@@ -142,7 +183,7 @@ void draw() {
     //pg.line(c2.x, c2.y,c4.x, c4.y);
     
     
-    float x2 = width/40*sin(anglesin);
+    float x2 = height/40*sin(anglesin);
     
     for(int i=0; i<anglelis.length; i++){
     
@@ -179,24 +220,40 @@ void draw() {
     anglelis[i] -= 0.0025;
   }
   anglesin -= 0.25;
-  
-  pg.textFont(font);
-  pg.textAlign(CENTER,CENTER);
-  pg.stroke(0);
-  //pg.noStroke();
-  pg.fill(255);
-  pg.text("Punt", cx+width*3/100, cy-height*3/100);
-  pg.textAlign(LEFT,TOP);
-  pg.text("Vier", c1.x+width*3/100, c1.y-height*1/100);
-  pg.textAlign(RIGHT,BOTTOM);
-  pg.text("Nul", c3.x-width*3/100, c3.y-height*1/100);
-  
-  
+
   pg.endDraw();
     
   image(pg, 0,0);
+  
+  fill(255);
+  stroke(0);
+  strokeWeight(strokeweight);
+  
+  pushMatrix();
+  translate(c1.x+width*2/100, c1.y+height*13/100);
+  vier.draw();
+  popMatrix();
+  
+  pushMatrix();
+  translate(cx, cy+height*4/100);
+  punt.draw();
+  popMatrix();
+  
+  pushMatrix();
+  translate(c3.x-width*3/100, c3.y-height*4/100);
+  nul.draw();
+  popMatrix();
+  
   //fill(255,20);
   //noStroke();
   //text("Vier\nPunt\nNul", cx, cy);
+  //videoExport.saveFrame();
   
+}
+
+void keyPressed() {
+  if (key == 'q') {
+    //videoExport.endMovie();
+    exit();
+  }
 }
